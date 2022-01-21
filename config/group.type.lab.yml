@@ -1,0 +1,11 @@
+uuid: be555bbc-6fef-4f67-8caf-c525267a6613
+langcode: en
+status: true
+dependencies: {  }
+id: lab
+label: Lab
+description: Laboratory
+new_revision: true
+creator_membership: false
+creator_wizard: true
+creator_roles: {  }

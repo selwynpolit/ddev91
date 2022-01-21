@@ -1,0 +1,29 @@
+uuid: ec614014-732a-49c6-a4e3-ef2ec4b5b2b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_lab_group_type
+    - group.type.lab
+    - taxonomy.vocabulary.lab_type
+id: group.lab.field_lab_group_type
+field_name: field_lab_group_type
+entity_type: group
+bundle: lab
+label: 'Lab Group Type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      lab_type: lab_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

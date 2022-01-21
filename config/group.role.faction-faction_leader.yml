@@ -1,0 +1,22 @@
+uuid: 9e450301-9ddd-49e5-bf6d-776947853fa5
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.faction
+id: faction-faction_leader
+label: 'Faction leader'
+weight: 5
+internal: false
+audience: member
+group_type: faction
+permissions_ui: true
+permissions:
+  - 'access group_node overview'
+  - 'administer group'
+  - 'administer members'
+  - 'edit group'
+  - 'leave group'
+  - 'update own group_membership content'
+  - 'view group'
+  - 'view group_membership content'

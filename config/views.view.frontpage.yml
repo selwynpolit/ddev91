@@ -1,4 +1,4 @@
-uuid: 5533601f-e162-486f-a34d-dfe4c35288c2
+uuid: eab52654-3d5f-44bd-ac25-0920b3861ae5
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: Xk6puCoRlHSJG8mU9Zg2iN4fbnzaw2dFolwMfpWxDSE
+  default_config_hash: XEFoA1ECJzKZN4VpnDqqRQO-oltuYdmjjvGEYDKs8uU
 id: frontpage
 label: Frontpage
 module: node
@@ -20,7 +20,7 @@ base_field: nid
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Default
     display_plugin: default
     position: 0
     display_options:

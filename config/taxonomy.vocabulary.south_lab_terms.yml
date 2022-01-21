@@ -1,0 +1,8 @@
+uuid: c2b81fdf-6407-450c-b50e-11c75fbea179
+langcode: en
+status: true
+dependencies: {  }
+name: 'South Lab Terms'
+vid: south_lab_terms
+description: 'South Lab Terms'
+weight: 0

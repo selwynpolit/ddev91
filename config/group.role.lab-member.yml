@@ -1,0 +1,14 @@
+uuid: b6e07603-5bc7-47f6-a382-9bf7076ac523
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.lab
+id: lab-member
+label: Member
+weight: -100
+internal: true
+audience: member
+group_type: lab
+permissions_ui: true
+permissions: {  }

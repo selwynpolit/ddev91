@@ -1,4 +1,4 @@
-uuid: 10ab915c-4e0d-459b-95b8-ed7ca2499454
+uuid: b7c582d7-e351-4066-8c9c-4b7824d1df22
 langcode: en
 status: false
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: _TuOQPG7BoDmbu8Qdrik_4uMn7IcbwPVpSh9IOV2IDg
+  default_config_hash: sz_FoMz5aClG4jFy4UDlkenXQtgTUXohEDjWVBuHaro
 id: glossary
 label: Glossary
 module: node
@@ -19,7 +19,7 @@ base_field: nid
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Default
     display_plugin: default
     position: 0
     display_options:

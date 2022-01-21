@@ -1,0 +1,17 @@
+uuid: 493c671c-807f-48d7-9ef8-b01559a98d14
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.faction
+  enforced:
+    config:
+      - user.role.administrator
+id: faction-a416e6833
+label: Administrator
+weight: 3
+internal: true
+audience: outsider
+group_type: faction
+permissions_ui: false
+permissions: {  }

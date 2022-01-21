@@ -1,0 +1,53 @@
+uuid: 3a65f6bb-acd0-429c-8acb-63756557746a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.lab.field_lab_group_body
+    - field.field.group.lab.field_lab_group_image
+    - field.field.group.lab.field_lab_group_type
+    - group.type.lab
+  module:
+    - image
+    - text
+id: group.lab.default
+targetEntityType: group
+bundle: lab
+mode: default
+content:
+  field_lab_group_body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  field_lab_group_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  field_lab_group_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: -1
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+hidden:
+  changed: true
+  created: true
+  uid: true

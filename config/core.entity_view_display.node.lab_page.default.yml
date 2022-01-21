@@ -1,0 +1,38 @@
+uuid: 9f9843c9-6e9e-418f-b95a-44b025524e64
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.lab_page.body
+    - field.field.node.lab_page.field_lab_image
+    - node.type.lab_page
+  module:
+    - text
+    - user
+id: node.lab_page.default
+targetEntityType: node
+bundle: lab_page
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_lab_image:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

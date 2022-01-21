@@ -1,11 +1,11 @@
-uuid: 1f224822-5957-4c52-93fc-4c854f8b4af0
+uuid: 41113e40-bc74-45d1-9b86-af05804f5c35
 langcode: en
 status: true
 dependencies:
   module:
     - block
 _core:
-  default_config_hash: p0RFIRt3fQULgsg3B2wHgLjJqxliqEIcDCxve9Yn0rU
+  default_config_hash: DI2aQ7IbaYrwUfiwSn-3g-ANh_t7LzQ1JkRqd1ujgFs
 id: block-layout
 label: 'Block Layout Page'
 module: block
@@ -24,22 +24,22 @@ tips:
     plugin: text
     label: 'Place Blocks'
     weight: 2
-    body: 'Any custom or contributed block can be added to a particular region by clicking on a button Place block. A new block can also be created by clicking on Place Block'
     selector: .button--small
+    body: 'Any custom or contributed block can be added to a particular region by clicking on a button Place block. A new block can also be created by clicking on Place Block'
   block-region:
     id: block-region
     plugin: text
     label: 'Block Region'
     weight: 3
-    body: 'Assign or change the region of a block by clicking here. A dropdown list with all the regions will appear.You can place one block in multiple regions.'
     selector: .block-region-select
+    body: 'Assign or change the region of a block by clicking here. A dropdown list with all the regions will appear.You can place one block in multiple regions.'
   configure-block:
     id: configure-block
     plugin: text
     label: 'Configure Block'
     weight: 4
-    body: 'By Clicking on "Configure" you can go ahead and edit the contents of the block, deal with the visibility settings and even change the placement of where it is on your theme.'
     selector: .dropbutton-widget
+    body: 'By Clicking on "Configure" you can go ahead and edit the contents of the block, deal with the visibility settings and even change the placement of where it is on your theme.'
   custom-block-library:
     id: custom-block-library
     plugin: text

@@ -1,4 +1,4 @@
-uuid: 61e11a10-5936-4f11-b7e5-71b0f04ec75c
+uuid: 0e3cde85-bc43-401f-8d09-d31002823bc5
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
     - image
     - user
 _core:
-  default_config_hash: 6k-VBFilDLuzgSOT-77CFgHFlcd5D-kqRixtH89EShU
+  default_config_hash: 0q8-mw8y-Ls5I578sIPQFLp4ljpH7WvVYpzY-I9O-8E
 id: user.user_picture
 field_name: user_picture
 entity_type: user

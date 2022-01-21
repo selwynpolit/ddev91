@@ -1,10 +1,10 @@
 _core:
-  default_config_hash: yTxtFqBHnEWxQswuWvkjE8mKw2t8oKuCL1q8KnfHuGE
+  default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
 langcode: en
-uuid: 83858028-1257-4520-a22e-f80f3038b760
-name: 'Drush Site-Install'
+uuid: ad1e2215-37d9-491c-937d-d2ff229653f0
+name: ddev91
 mail: admin@example.com
-slogan: ''
+slogan: 'We test out groups here'
 page:
   403: ''
   404: ''

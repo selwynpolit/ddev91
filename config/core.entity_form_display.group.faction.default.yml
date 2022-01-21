@@ -1,0 +1,66 @@
+uuid: 5d3d636e-bec0-4062-8bab-88c6397fb24c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.faction.field_faction_description
+    - field.field.group.faction.field_faction_insignia
+    - field.field.group.faction.field_faction_territory
+    - group.type.faction
+    - image.style.thumbnail
+  module:
+    - image
+    - path
+    - text
+id: group.faction.default
+targetEntityType: group
+bundle: faction
+mode: default
+content:
+  field_faction_description:
+    type: text_textarea_with_summary
+    weight: 1
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_faction_insignia:
+    type: image_image
+    weight: 3
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_faction_territory:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  uid: true

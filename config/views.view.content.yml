@@ -1,4 +1,4 @@
-uuid: 3e813531-b579-4d9c-8b6f-0ce3af65fb13
+uuid: 3ae5f405-96bc-46d4-9ab0-3c7db9817883
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: P7F4DFe8BL31DRVqsvS-ix9KZZqvvaPjZ7zEvGo9yNM
+  default_config_hash: vBKWYGGDoAX-tFd1JErB8tZLSxx3lJ0foouVsgpcbB4
 id: content
 label: Content
 module: node
@@ -17,7 +17,7 @@ base_field: nid
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Default
     display_plugin: default
     position: 0
     display_options:

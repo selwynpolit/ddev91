@@ -1,0 +1,23 @@
+uuid: 3505b09a-4228-4305-bf32-1a67255f8345
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_lab_group_body
+    - group.type.lab
+  module:
+    - text
+id: group.lab.field_lab_group_body
+field_name: field_lab_group_body
+entity_type: group
+bundle: lab
+label: 'Lab Group Body'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

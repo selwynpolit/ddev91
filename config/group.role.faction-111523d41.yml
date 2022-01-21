@@ -1,0 +1,17 @@
+uuid: 34c06315-5d93-476a-8c7e-d9446fc7c51e
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.faction
+  enforced:
+    config:
+      - user.role.content_editor
+id: faction-111523d41
+label: 'Content editor'
+weight: 2
+internal: true
+audience: outsider
+group_type: faction
+permissions_ui: false
+permissions: {  }

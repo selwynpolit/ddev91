@@ -1,4 +1,4 @@
-uuid: d0f2ecdf-055b-45db-b965-c98bafc3b8ce
+uuid: 9a271164-8966-4e86-968b-d5ff678e148b
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - comment
     - user
 _core:
-  default_config_hash: xYsnUBUnDk0S9KmMSeGgSBPZMAB5aEJhMqN9vCW1L-A
+  default_config_hash: CgXkKY33fd-yaHz89du2hSw6MJOoIeNUJ-VHE5BiSdQ
 id: comment
 label: Comments
 module: comment
@@ -17,7 +17,7 @@ base_field: cid
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Default
     display_plugin: default
     position: 0
     display_options:

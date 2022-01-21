@@ -1,0 +1,8 @@
+uuid: eb81d26d-cbe8-4f9e-8284-5ed93b298642
+langcode: en
+status: true
+dependencies: {  }
+name: 'North Lab Terms'
+vid: north_lab_terms
+description: 'North Lab Terms'
+weight: 0

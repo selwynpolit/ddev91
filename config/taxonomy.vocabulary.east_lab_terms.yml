@@ -1,0 +1,8 @@
+uuid: 175cbdb7-af55-4870-b049-1d48732a082e
+langcode: en
+status: true
+dependencies: {  }
+name: 'East Lab Terms'
+vid: east_lab_terms
+description: 'East Lab Terms'
+weight: 0
