@@ -10,7 +10,15 @@ id: group_content
 label: 'Group content'
 type: 'canonical_entities:group_content'
 pattern: 'group/[group_content:group:id]/[group_content:pretty-path-key]/[group_content:id]'
-selection_criteria: {  }
+selection_criteria:
+  5fcd0790-1500-4c47-8676-3a54d8543307:
+    id: 'entity_bundle:group_content'
+    negate: false
+    uuid: 5fcd0790-1500-4c47-8676-3a54d8543307
+    context_mapping:
+      group_content: group_content
+    bundles:
+      lab-group_node-lab_page: lab-group_node-lab_page
 selection_logic: and
 weight: -5
 relationships:

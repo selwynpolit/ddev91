@@ -7,8 +7,8 @@ dependencies:
 third_party_settings:
   menu_ui:
     available_menus:
-      - main
-    parent: 'main:'
+      - lab-menu
+    parent: 'lab-menu:'
 name: 'Lab Page'
 type: lab_page
 description: 'Page used for labs'

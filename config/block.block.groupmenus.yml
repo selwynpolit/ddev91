@@ -1,0 +1,31 @@
+uuid: 36015e5e-86e6-497d-9978-a04828f8fa12
+langcode: en
+status: true
+dependencies:
+  module:
+    - group
+    - groupmenu_block
+  theme:
+    - bartik
+id: groupmenus
+theme: bartik
+region: sidebar_first
+weight: 0
+provider: null
+plugin: groupmenus
+settings:
+  id: groupmenus
+  label: 'Group menus'
+  label_display: visible
+  provider: groupmenu_block
+  context_mapping:
+    group: '@group.group_route_context:group'
+  max_depth: '0'
+visibility:
+  'entity_bundle:group':
+    id: 'entity_bundle:group'
+    negate: false
+    context_mapping:
+      group: '@group.group_route_context:group'
+    bundles:
+      lab: lab
