@@ -4,6 +4,10 @@ namespace Drupal\group\Entity;
 
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -151,7 +155,7 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
   /**
    * {@inheritdoc}
    */
-  public function addContent(ContentEntityInterface $entity, $plugin_id, $values = []) {
+  public function addContent(EntityInterface $entity, $plugin_id, $values = []) {
     $storage = $this->groupContentStorage();
     $group_content = $storage->createForEntityInGroup($entity, $this, $plugin_id, $values);
     $storage->save($group_content);
@@ -168,7 +172,10 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
    * {@inheritdoc}
    */
   public function getContentByEntityId($plugin_id, $id) {
-    return $this->getContent($plugin_id, ['entity_id' => $id]);
+    $plugin = $this->getGroupType()->getContentPlugin($plugin_id);
+    $entity_type_id = $plugin->getPluginDefinition()['entity_type_id'];
+    $ref_field_name = GroupContent::getEntityFieldNameForEntityType($entity_type_id);
+    return $this->getContent($plugin_id, [$ref_field_name => $id]);
   }
 
   /**

@@ -4,6 +4,8 @@ namespace Drupal\group\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\group\Entity\GroupContent;
+use Drupal\group\Plugin\GroupContentEnablerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -78,13 +80,17 @@ class GroupContentCardinalityValidator extends ConstraintValidator implements Co
       return;
     }
 
-    // Get the entity_id field label for error messages.
-    $field_name = $group_content->getFieldDefinition('entity_id')->getLabel();
+    // Get the content reference field name. May be either entity_id or
+    // entity_id_str depending on the referenced content type.
+    $ref_field = $this->getContentReferenceField($plugin);
+
+    // Get the content reference field label for error messages.
+    $field_name = $group_content->getFieldDefinition($ref_field)->getLabel();
 
     // Enforce the group cardinality if it's not set to unlimited.
     if ($group_cardinality > 0) {
       // Get the group content entities for this piece of content.
-      $properties = ['type' => $plugin->getContentTypeConfigId(), 'entity_id' => $entity->id()];
+      $properties = ['type' => $plugin->getContentTypeConfigId(), $ref_field => $entity->id()];
       $group_instances = $this->entityTypeManager
         ->getStorage('group_content')
         ->loadByProperties($properties);
@@ -108,7 +114,7 @@ class GroupContentCardinalityValidator extends ConstraintValidator implements Co
           // We manually flag the entity reference field as the source of the
           // violation so form API will add a visual indicator of where the
           // validation failed.
-          ->atPath('entity_id.0')
+          ->atPath($ref_field . '.0')
           ->addViolation();
       }
     }
@@ -139,10 +145,24 @@ class GroupContentCardinalityValidator extends ConstraintValidator implements Co
           // We manually flag the entity reference field as the source of the
           // violation so form API will add a visual indicator of where the
           // validation failed.
-          ->atPath('entity_id.0')
+          ->atPath($ref_field . '.0')
           ->addViolation();
       }
     }
+  }
+
+  /**
+   * Returns the name of the group content entity reference field.
+   *
+   * @param \Drupal\group\Plugin\GroupContentEnablerInterface $plugin
+   *   Group content enable plugin.
+   *
+   * @return string
+   *   The name of the content reference field.
+   */
+  protected function getContentReferenceField(GroupContentEnablerInterface $plugin) {
+    $entity_type_id = $plugin->getPluginDefinition()['entity_type_id'];
+    return GroupContent::getEntityFieldNameForEntityType($entity_type_id);
   }
 
 }

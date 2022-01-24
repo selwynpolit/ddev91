@@ -11,6 +11,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -19,6 +20,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupContent;
+use Drupal\group\Field\GroupContentReferenceDefinition;
 use Drupal\group\QueryAccess\EntityQueryAlter;
 use Drupal\user\RoleInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -359,12 +361,10 @@ function group_entity_access(EntityInterface $entity, $operation, AccountInterfa
  * Implements hook_entity_delete().
  */
 function group_entity_delete(EntityInterface $entity) {
-  if ($entity instanceof ContentEntityInterface) {
-    if ($group_contents = GroupContent::loadByEntity($entity)) {
-      /** @var \Drupal\group\Entity\GroupContent $group_content */
-      foreach ($group_contents as $group_content) {
-        $group_content->delete();
-      }
+  if ($group_contents = GroupContent::loadByEntity($entity)) {
+    /** @var \Drupal\group\Entity\GroupContent $group_content */
+    foreach ($group_contents as $group_content) {
+      $group_content->delete();
     }
   }
 }
@@ -670,6 +670,17 @@ function group_content_entity_submit($form, FormStateInterface $form_state) {
   }
   else {
     $form_state->setRedirect('<front>');
+  }
+}
+
+/**
+ * Implements hook_entity_field_storage_info().
+ */
+function group_entity_field_storage_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() == 'group_content') {
+    $field_storages['entity_id'] = GroupContentReferenceDefinition::createNumericalReference();
+    $field_storages['entity_id_str'] = GroupContentReferenceDefinition::createStringReference();
+    return $field_storages;
   }
 }
 

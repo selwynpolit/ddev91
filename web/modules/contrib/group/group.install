@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\group\Entity\GroupContent;
 use Drupal\group\Entity\Storage\GroupContentStorageSchema;
+use Drupal\group\Field\GroupContentReferenceDefinition;
 
 /**
  * Resave all GroupContent labels and remove orphaned entities.
@@ -587,4 +588,137 @@ function group_update_8023() {
     $group_type->set('new_revision', FALSE);
     $group_type->save(TRUE);
   }
+}
+
+/**
+ * Copy entity_id field to temporary table.
+ */
+function group_update_8024(&$sandbox) {
+  // Update hooks have been re-numbered (was 8016) so must check if run already.
+  $entity_id_field_exists = \Drupal::database()->schema()->fieldExists('group_content_field_data', 'entity_id');
+  if ($entity_id_field_exists) {
+    $query = \Drupal::database()
+      ->select('group_content_field_data', 'g')
+      ->fields('g', ['id', 'entity_id']);
+
+    // Initialize the update process, create a temporary table.
+    if (!isset($sandbox['total'])) {
+      $sandbox['total'] = $query->countQuery()->execute()->fetchField();
+      $sandbox['current'] = 0;
+
+      \Drupal::database()
+        ->schema()
+        ->createTable('group_content_entity_id_update', [
+          'fields' => [
+            'id' => [
+              'type' => 'int',
+              'unsigned' => TRUE,
+              'not null' => TRUE,
+            ],
+            'entity_id' => [
+              'type' => 'int',
+              'unsigned' => TRUE,
+              'not null' => TRUE,
+            ],
+          ],
+          'primary key' => [
+            'id',
+          ],
+          'description' => 'Temporary storage for group_content entity_id field migration',
+        ]);
+    }
+
+    // We're doing one SELECT and one INSERT, so 500 rows at once should be fine.
+    $rows_per_operation = 500;
+    $query->condition('id', $sandbox['current'], '>');
+    $query->range(0, $rows_per_operation);
+    $query->orderBy('id', 'ASC');
+
+    // We're not doing INSERT ... SELECT since I'm not sure how it would perform
+    // on highly loaded databases with much data. One such big query could even
+    // lock a database for a long time.
+    // Core is using the same approach essentially.
+    // @see taxonomy_update_8502()
+    $rows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    if ($rows) {
+      $insert = \Drupal::database()
+        ->insert('group_content_entity_id_update')
+        ->fields(['id', 'entity_id']);
+
+      foreach ($rows as $row) {
+        $insert->values($row);
+        $sandbox['current'] = $row['id'];
+      }
+
+      $insert->execute();
+      $temp_count = \Drupal::database()
+        ->select('group_content_entity_id_update')
+        ->countQuery()->execute()->fetchField();
+      $sandbox['#finished'] = ($temp_count / $sandbox['total']);
+    }
+    else {
+      $sandbox['#finished'] = 1;
+    }
+
+    if ($sandbox['#finished'] >= 1) {
+      // Delete the field schema once data is copied.
+      $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+      if ($entity_definition_update_manager->getEntityType('group_content')) {
+        $storage_definition = $entity_definition_update_manager->getFieldStorageDefinition('entity_id', 'group_content');
+        if ($storage_definition) {
+          $entity_definition_update_manager->uninstallFieldStorageDefinition($storage_definition);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Install new group_content entity_id and entity_id_str fields schema.
+ */
+function group_update_8025(&$sandbox) {
+  $entity_id_definition = GroupContentReferenceDefinition::create('entity_reference')
+    ->setName('entity_id')
+    ->setTargetEntityTypeId('group_content')
+    ->setTargetBundle(NULL)
+    ->setLabel(t('Content'))
+    ->setDescription(t('The entity to add to the group.'))
+    ->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'placeholder' => '',
+      ],
+    ])
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setRequired(TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('entity_id', 'group_content', 'group_content', $entity_id_definition);
+
+  $entity_id_str_definition = GroupContentReferenceDefinition::create('entity_reference')
+    ->setName('entity_id_str')
+    ->setTargetEntityTypeId('group_content')
+    ->setTargetBundle(NULL)
+    ->setLabel(t('Content'))
+    ->setDescription(t('The entity to add to the group.'))
+    ->setSetting('target_type', 'menu')
+    ->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'placeholder' => '',
+      ],
+    ])
+    ->setDisplayConfigurable('view', TRUE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setRequired(TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('entity_id_str', 'group_content', 'group_content', $entity_id_str_definition);
 }

@@ -3,6 +3,7 @@
 namespace Drupal\Tests\group\Kernel;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\group\Entity\GroupContent;
 
 /**
  * Tests for the GroupContent entity.
@@ -16,7 +17,18 @@ class GroupContentTest extends GroupKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['group_test', 'group_test_plugin'];
+  public static $modules = ['group_test', 'group_test_plugin', 'group_test_content'];
+
+  /**
+   * Tests getting entity reference field name.
+   *
+   * @covers ::getEntityFieldNameForEntityType
+   */
+  public function testGetGroupContentTypeField() {
+    $this->assertEquals('entity_id', GroupContent::getEntityFieldNameForEntityType('group_test_content_entity_int'));
+    $this->assertEquals('entity_id_str', GroupContent::getEntityFieldNameForEntityType('group_test_content_entity_string'));
+    $this->assertEquals('entity_id_str', GroupContent::getEntityFieldNameForEntityType('group_test_config_entity_string'));
+  }
 
   /**
    * Tests that entity url templates are functional.

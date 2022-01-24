@@ -4,13 +4,14 @@ namespace Drupal\group\Entity;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityBase;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\group\Field\GroupContentReferenceDefinition;
 use Drupal\user\EntityOwnerTrait;
-use Drupal\user\UserInterface;
 
 /**
  * Defines the Group content entity.
@@ -97,7 +98,34 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
    * {@inheritdoc}
    */
   public function getEntity() {
-    return $this->entity_id->entity;
+    return $this->{$this->getEntityFieldName()}->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getEntityFieldNameForEntityType($entity_type_id) {
+    // If the entity type is fieldable and has a numeric ID field, use an entity
+    // reference field with an integer-based schema.
+    $entity_type = \Drupal::entityTypeManager()->getDefinition($entity_type_id);
+    if ($entity_type->entityClassImplements(FieldableEntityInterface::class)) {
+      /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $base_fields */
+      $base_fields = \Drupal::service('entity_field.manager')->getBaseFieldDefinitions($entity_type_id);
+      if ($base_fields[$entity_type->getKey('id')]->getType() === 'integer') {
+        return 'entity_id';
+      }
+    }
+
+    // Default to a string reference.
+    return 'entity_id_str';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityFieldName() {
+    $entity_type_id = $this->getContentPlugin()->getPluginDefinition()['entity_type_id'];
+    return static::getEntityFieldNameForEntityType($entity_type_id);
   }
 
   /**
@@ -119,7 +147,7 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
   /**
    * {@inheritdoc}
    */
-  public static function loadByEntity(ContentEntityInterface $entity) {
+  public static function loadByEntity(EntityInterface $entity) {
     /** @var \Drupal\group\Entity\Storage\GroupContentStorageInterface $storage */
     $storage = \Drupal::entityTypeManager()->getStorage('group_content');
     return $storage->loadByEntity($entity);
@@ -240,8 +268,9 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
   public function getListCacheTagsToInvalidate() {
     $tags = parent::getListCacheTagsToInvalidate();
 
+    $field_name = $this->getEntityFieldName();
     $group_id = $this->get('gid')->target_id;
-    $entity_id = $this->get('entity_id')->target_id;
+    $entity_id = $this->get($field_name)->target_id;
     $plugin_id = $this->getGroupContentType()->getContentPluginId();
 
     // A specific group gets any content, regardless of plugin used.
@@ -279,24 +308,6 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
       ->setDescription(t('The group containing the entity.'))
       ->setSetting('target_type', 'group')
       ->setReadOnly(TRUE)
-      ->setRequired(TRUE);
-
-    // Borrowed this logic from the Comment module.
-    // Warning! May change in the future: https://www.drupal.org/node/2346347
-    $fields['entity_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Content'))
-      ->setDescription(t('The entity to add to the group.'))
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE)
       ->setRequired(TRUE);
 
     $fields['label'] = BaseFieldDefinition::create('string')
@@ -345,37 +356,35 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
    * {@inheritdoc}
    */
   public static function bundleFieldDefinitions(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions) {
-    // Borrowed this logic from the Comment module.
-    // Warning! May change in the future: https://www.drupal.org/node/2346347
+    /** @var \Drupal\group\Field\GroupContentReferenceDefinition[] $fields */
+    $fields = [];
+
+    // Depending on whether the entity type that can be grouped by this bundle
+    // has a numerical or string ID field, we add an entity reference field that
+    // has either an integer or varchar schema, respectively.
+    /** @var \Drupal\group\Entity\GroupContentTypeInterface $group_content_type */
     if ($group_content_type = GroupContentType::load($bundle)) {
       $plugin = $group_content_type->getContentPlugin();
 
-      /** @var \Drupal\Core\Field\BaseFieldDefinition $original */
-      $original = $base_field_definitions['entity_id'];
+      $field_name = static::getEntityFieldNameForEntityType($plugin->getEntityTypeId());
+      $fields[$field_name] = $field_name === 'entity_id'
+        ? GroupContentReferenceDefinition::createNumericalReference()
+        : GroupContentReferenceDefinition::createStringReference();
 
-      // Recreated the original entity_id field so that it does not contain any
-      // data in its "propertyDefinitions" or "schema" properties because those
-      // were set based on the base field which had no clue what bundle to serve
-      // up until now. This is a bug in core because we can't simply unset those
-      // two properties, see: https://www.drupal.org/node/2346329
-      $fields['entity_id'] = BaseFieldDefinition::create('entity_reference')
-        ->setLabel($plugin->getEntityReferenceLabel() ?: $original->getLabel())
-        ->setDescription($plugin->getEntityReferenceDescription() ?: $original->getDescription())
-        ->setConstraints($original->getConstraints())
-        ->setDisplayOptions('view', $original->getDisplayOptions('view'))
-        ->setDisplayOptions('form', $original->getDisplayOptions('form'))
-        ->setDisplayConfigurable('view', $original->isDisplayConfigurable('view'))
-        ->setDisplayConfigurable('form', $original->isDisplayConfigurable('form'))
-        ->setRequired($original->isRequired());
-
-      foreach ($plugin->getEntityReferenceSettings() as $name => $setting) {
-        $fields['entity_id']->setSetting($name, $setting);
+      if ($label = $plugin->getEntityReferenceLabel()) {
+        $fields[$field_name]->setLabel($label);
       }
 
-      return $fields;
+      if ($description = $plugin->getEntityReferenceDescription()) {
+        $fields[$field_name]->setDescription($description);
+      }
+
+      foreach ($plugin->getEntityReferenceSettings() as $name => $setting) {
+        $fields[$field_name]->setSetting($name, $setting);
+      }
     }
 
-    return [];
+    return $fields;
   }
 
 }

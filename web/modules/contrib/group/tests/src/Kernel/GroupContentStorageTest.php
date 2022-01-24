@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\group\Kernel;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\group\Entity\GroupContentInterface;
 
 /**
  * Tests the behavior of group content storage handler.
@@ -15,7 +17,7 @@ class GroupContentStorageTest extends GroupKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['group_test_plugin'];
+  public static $modules = ['group_test_plugin', 'group_test_content'];
 
   /**
    * The group content storage handler.
@@ -38,6 +40,15 @@ class GroupContentStorageTest extends GroupKernelTestBase {
     $storage = $this->entityTypeManager->getStorage('group_content_type');
     $storage->createFromPlugin($group_type, 'user_as_content')->save();
     $storage->createFromPlugin($group_type, 'group_as_content')->save();
+
+    $this->installConfig(['group_test_content']);
+    $storage->createFromPlugin($group_type, 'integer_content_entity_as_content')->save();
+    $storage->createFromPlugin($group_type, 'string_config_entity_as_content')->save();
+    $storage->createFromPlugin($group_type, 'string_content_entity_as_content')->save();
+
+    $this->installEntitySchema('group_test_content_entity_int');
+    $this->installEntitySchema('group_test_config_entity_string');
+    $this->installEntitySchema('group_test_content_entity_string');
   }
 
   /**
@@ -207,6 +218,112 @@ class GroupContentStorageTest extends GroupKernelTestBase {
   public function testLoadByContentPluginId() {
     $this->createGroup();
     $this->assertCount(1, $this->storage->loadByContentPluginId('group_membership'), 'Managed to load the group creator membership by plugin ID.');
+  }
+
+  /**
+   * Tests the loading of GroupContent entities for a group.
+   *
+   * @dataProvider testEntityTypesDataProvider
+   * @covers ::loadByGroup
+   */
+  public function testLoadContentByGroup($entity_type, $plugin_id) {
+    $group = $this->createGroup();
+    $entity = $this->createTestEntity($entity_type);
+    $this->storage->createForEntityInGroup($entity, $group, $plugin_id)->save();
+    $loaded_entities = $this->storage->loadByGroup($group);
+    $this->assertCount(2, $loaded_entities, 'Managed to load the group contents by group.');
+    $loaded_users_contents = array_filter($loaded_entities, function (GroupContentInterface $group_content) {
+      return $group_content->getEntity()->getEntityTypeId() == 'user';
+    });
+    $loaded_group_contents = array_filter($loaded_entities, function (GroupContentInterface $group_content) use ($entity_type) {
+      return $group_content->getEntity()->getEntityTypeId() == $entity_type;
+    });
+    $this->assertCount(1, $loaded_users_contents);
+    $this->assertCount(1, $loaded_group_contents);
+
+    $group_content = reset($loaded_group_contents);
+    $this->assertSameEntity($entity, $group_content->getEntity());
+  }
+
+  /**
+   * Tests the loading of GroupContent entities for an entity.
+   *
+   * @dataProvider testEntityTypesDataProvider
+   * @covers ::loadByEntity
+   */
+  public function testLoadContentByEntity($entity_type, $plugin_id) {
+    $group = $this->createGroup();
+    $entity = $this->createTestEntity($entity_type);
+    $this->storage->createForEntityInGroup($entity, $group, $plugin_id)->save();
+    $loaded_entities = $this->storage->loadByEntity($entity);
+    $this->assertCount(1, $loaded_entities, 'Managed to load the group content by entity.');
+    $group_content = reset($loaded_entities);
+    $this->assertSameEntity($entity, $group_content->getEntity());
+  }
+
+  /**
+   * Tests the loading of GroupContent entities for an entity.
+   *
+   * @dataProvider testEntityTypesDataProvider
+   * @covers ::loadByContentPluginId
+   */
+  public function testLoadContentByContentPluginId($entity_type, $plugin_id) {
+    $group = $this->createGroup();
+    $entity = $this->createTestEntity($entity_type);
+    $this->storage->createForEntityInGroup($entity, $group, $plugin_id)->save();
+    $loaded_entities = $this->storage->loadByContentPluginId($plugin_id);
+    $this->assertCount(1, $loaded_entities, 'Managed to load the group content by plugin ID.');
+    $group_content = reset($loaded_entities);
+    $this->assertSameEntity($entity, $group_content->getEntity());
+  }
+
+  /**
+   * Data provider returning test entity types and corresponding plugins.
+   */
+  public function testEntityTypesDataProvider() {
+    return [
+      ['group_test_content_entity_int', 'integer_content_entity_as_content'],
+      ['group_test_content_entity_string', 'string_content_entity_as_content'],
+      ['group_test_config_entity_string', 'string_config_entity_as_content'],
+    ];
+  }
+
+  /**
+   * Creates test entity to be used as a test group content.
+   *
+   * @param string $entity_type
+   *   Entity type.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The new saved entity of a given type.
+   */
+  protected function createTestEntity($entity_type) {
+    $storage = $this->entityTypeManager->getStorage($entity_type);
+    $values = [];
+
+    switch ($entity_type) {
+      case 'group_test_content_entity_string':
+      case 'group_test_config_entity_string':
+        $values['id'] = $this->randomMachineName();
+        break;
+    }
+
+    $entity = $storage->create($values);
+    $entity->save();
+    return $entity;
+  }
+
+  /**
+   * Asserts two entity objects are same.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $expected
+   *   The entity which was expected.
+   * @param \Drupal\Core\Entity\EntityInterface $actual
+   *   The entity which was retrieved during the test.
+   */
+  protected function assertSameEntity(EntityInterface $expected, EntityInterface $actual) {
+    $this->assertEquals($expected->getEntityTypeId(), $actual->getEntityTypeId());
+    $this->assertEquals($expected->id(), $actual->id());
   }
 
 }

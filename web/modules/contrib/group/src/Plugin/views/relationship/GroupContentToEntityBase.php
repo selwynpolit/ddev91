@@ -31,6 +31,12 @@ abstract class GroupContentToEntityBase extends RelationshipPluginBase {
   /**
    * Constructs an GroupContentToEntityBase object.
    *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
    * @param \Drupal\views\Plugin\ViewsHandlerManager $join_manager
    *   The views plugin join manager.
    * @param \Drupal\group\Plugin\GroupContentEnablerManagerInterface $plugin_manager
@@ -64,17 +70,7 @@ abstract class GroupContentToEntityBase extends RelationshipPluginBase {
    * @return string
    *   The target entity type ID.
    */
-  protected abstract function getTargetEntityType();
-
-  /**
-   * Retrieves type of join field to use.
-   *
-   * Can be either 'field' or 'left_field'.
-   *
-   * @return string
-   *   The type of join field to use.
-   */
-  protected abstract function getJoinFieldType();
+  abstract protected function getTargetEntityType();
 
   /**
    * {@inheritdoc}
@@ -111,61 +107,6 @@ abstract class GroupContentToEntityBase extends RelationshipPluginBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function query() {
-    $this->ensureMyTable();
-
-    // Build the join definition.
-    $def = $this->definition;
-    $def['table'] = $this->definition['base'];
-    $def['field'] = $this->definition['base field'];
-    $def['left_table'] = $this->tableAlias;
-    $def['left_field'] = $this->realField;
-    $def['adjusted'] = TRUE;
-
-    // Change the join to INNER if the relationship is required.
-    if (!empty($this->options['required'])) {
-      $def['type'] = 'INNER';
-    }
-
-    // If there were extra join conditions added in the definition, use them.
-    if (!empty($this->definition['extra'])) {
-      $def['extra'] = $this->definition['extra'];
-    }
-
-    // We can't run an IN-query on an empty array. So if there are no group
-    // content types yet, we need to make sure the JOIN does not return any GCT
-    // that does not serve the entity type that was configured for this handler
-    // instance.
-    $group_content_type_ids = $this->getGroupContentTypeIds();
-    if (empty($group_content_type_ids)) {
-      $group_content_type_ids = ['***'];
-    }
-
-    // Then add our own join condition, namely the group content type IDs.
-    $def['extra'][] = [
-      $this->getJoinFieldType() => 'type',
-      'value' => $group_content_type_ids,
-    ];
-
-    // Use the standard join plugin unless instructed otherwise.
-    $join_id = !empty($def['join_id']) ? $def['join_id'] : 'standard';
-    $join = $this->joinManager->createInstance($join_id, $def);
-
-    // Add the join using a more verbose alias.
-    $alias = $def['table'] . '_' . $this->table;
-    $this->alias = $this->query->addRelationship($alias, $join, $this->definition['base'], $this->relationship);
-
-    // Add access tags if the base table provides it.
-    $table_data = $this->viewsData->get($def['table']);
-    if (empty($this->query->options['disable_sql_rewrite']) && isset($table_data['table']['base']['access query tag'])) {
-      $access_tag = $table_data['table']['base']['access query tag'];
-      $this->query->addTag($access_tag);
-    }
-  }
-
-  /**
    * Returns the group content types this relationship should filter on.
    *
    * This checks if any plugins were selected on the option form and, in that
@@ -191,6 +132,25 @@ abstract class GroupContentToEntityBase extends RelationshipPluginBase {
     }
 
     return $plugin_ids ? $group_content_type_ids : array_keys(GroupContentType::loadByEntityTypeId($this->getTargetEntityType()));
+  }
+
+  /**
+   * Returns the list of group content types for a query.
+   *
+   * We can't run an IN-query on an empty array. So if there are no group
+   * content types yet, we need to make sure the JOIN does not return any GCT
+   * that does not serve the entity type that was configured for this handler
+   * instance.
+   *
+   * @return array
+   *   The list of group content types to be used as extra JOIN condition.
+   */
+  protected function getGroupContentTypesValue() {
+    $group_content_type_ids = $this->getGroupContentTypeIds();
+    if (empty($group_content_type_ids)) {
+      $group_content_type_ids = ['***'];
+    }
+    return $group_content_type_ids;
   }
 
 }

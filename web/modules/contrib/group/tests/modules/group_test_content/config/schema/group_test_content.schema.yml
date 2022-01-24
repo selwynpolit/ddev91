@@ -1,0 +1,9 @@
+# Schema for the configuration files of the Configuration Test module.
+
+group_test_content.group_test_config_entity_string.*:
+  type: config_entity
+  label: 'Config test dynamic settings'
+  mapping:
+    id:
+      type: string
+      label: 'ID'

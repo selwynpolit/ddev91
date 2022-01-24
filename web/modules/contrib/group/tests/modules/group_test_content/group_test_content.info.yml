@@ -1,0 +1,8 @@
+name: 'Group test content'
+description: 'Provides entity types and plugins for Group content tests.'
+package: 'Testing'
+type: 'module'
+version: VERSION
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - 'group'

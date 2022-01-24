@@ -4,6 +4,7 @@ namespace Drupal\group\Entity\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\group\Entity\GroupContent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -51,7 +52,8 @@ class GroupContentForm extends ContentEntityForm {
     // Do not allow to edit the group content subject through the UI. Also hide
     // the field when we are on step 2 of a creation wizard.
     if ($this->operation !== 'add' || $form_state->get('group_wizard')) {
-      $form['entity_id']['#access'] = FALSE;
+      $entity_id_field = $this->getContentEntityField();
+      $form[$entity_id_field]['#access'] = FALSE;
     }
 
     return $form;
@@ -183,12 +185,23 @@ class GroupContentForm extends ContentEntityForm {
     $form_object->save($form, $form_state);
 
     // Add the newly saved entity's ID to the group content entity.
-    $property = $wizard_id == 'group_creator' ? 'gid' : 'entity_id';
+    $property = $wizard_id == 'group_creator' ? 'gid' : $this->getContentEntityField();
     $this->entity->set($property, $entity->id());
 
     // We also clear the temp store so we can start fresh next time around.
     $store->delete("$store_id:step");
     $store->delete("$store_id:entity");
+  }
+
+  /**
+   * Returns the name of the group content entity reference field.
+   *
+   * @return string
+   *   The name of the group content entity reference field.
+   */
+  protected function getContentEntityField() {
+    $entity_type_id = $this->getContentPlugin()->getPluginDefinition()['entity_type_id'];
+    return GroupContent::getEntityFieldNameForEntityType($entity_type_id);
   }
 
 }

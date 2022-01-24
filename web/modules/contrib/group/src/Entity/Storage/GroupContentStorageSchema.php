@@ -18,7 +18,7 @@ class GroupContentStorageSchema extends SqlContentEntityStorageSchema {
 
     if ($data_table = $this->storage->getDataTable()) {
       $schema[$data_table]['indexes'] += [
-        'group_content__entity_fields' => ['type', 'entity_id'],
+        'group_content__entity_fields' => ['type'],
       ];
     }
 

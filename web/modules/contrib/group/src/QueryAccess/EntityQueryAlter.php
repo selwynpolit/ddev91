@@ -229,9 +229,16 @@ class EntityQueryAlter implements ContainerInjectionInterface {
       }
     }
     $query->leftJoin(
+      'group_content__entity_id',
+      'gcfdss',
+      "$base_table.$id_key=gcfdss.entity_id_target_id AND gcfdss.bundle IN (:group_content_type_ids_in_use[])",
+      [':group_content_type_ids_in_use[]' => $group_content_type_ids_in_use]
+    );
+
+    $query->leftJoin(
       'group_content_field_data',
       'gcfd',
-      "$base_table.$id_key=gcfd.entity_id AND gcfd.type IN (:group_content_type_ids_in_use[])",
+      "gcfdss.entity_id=gcfd.id AND gcfd.type IN (:group_content_type_ids_in_use[])",
       [':group_content_type_ids_in_use[]' => $group_content_type_ids_in_use]
     );
 
@@ -331,7 +338,7 @@ class EntityQueryAlter implements ContainerInjectionInterface {
 
     // If no group type or group gave access, we deny access altogether.
     if (empty($allowed_any_ids) && empty($allowed_own_ids) && empty($allowed_any_by_status_ids) && empty($allowed_own_by_status_ids)) {
-      $query->isNull('gcfd.entity_id');
+      $query->isNull('gcfd.id');
       return;
     }
 
@@ -340,7 +347,7 @@ class EntityQueryAlter implements ContainerInjectionInterface {
     // access checks apply.
     $query->condition(
       $query->orConditionGroup()
-        ->isNull('gcfd.entity_id')
+        ->isNull('gcfd.id')
         ->condition($group_conditions = $query->orConditionGroup())
     );
 

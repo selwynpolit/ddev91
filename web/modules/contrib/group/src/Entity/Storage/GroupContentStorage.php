@@ -2,9 +2,10 @@
 
 namespace Drupal\group\Entity\Storage;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
+use Drupal\group\Entity\GroupContent;
 use Drupal\group\Entity\GroupInterface;
 
 /**
@@ -25,7 +26,7 @@ class GroupContentStorage extends SqlContentEntityStorage implements GroupConten
   /**
    * {@inheritdoc}
    */
-  public function createForEntityInGroup(ContentEntityInterface $entity, GroupInterface $group, $plugin_id, $values = []) {
+  public function createForEntityInGroup(EntityInterface $entity, GroupInterface $group, $plugin_id, $values = []) {
     // An unsaved entity cannot have any group content.
     if ($entity->id() === NULL) {
       throw new EntityStorageException("Cannot add an unsaved entity to a group.");
@@ -50,11 +51,14 @@ class GroupContentStorage extends SqlContentEntityStorage implements GroupConten
       }
     }
 
+    // Retrieve the entity reference field name.
+    $field_name = GroupContent::getEntityFieldNameForEntityType($entity->getEntityTypeId());
+
     // Set the necessary keys for a valid GroupContent entity.
     $keys = [
       'type' => $plugin->getContentTypeConfigId(),
       'gid' => $group->id(),
-      'entity_id' => $entity->id(),
+      $field_name => $entity->id(),
     ];
 
     // Return an unsaved GroupContent entity.
@@ -85,7 +89,7 @@ class GroupContentStorage extends SqlContentEntityStorage implements GroupConten
   /**
    * {@inheritdoc}
    */
-  public function loadByEntity(ContentEntityInterface $entity) {
+  public function loadByEntity(EntityInterface $entity) {
     // An unsaved entity cannot have any group content.
     $entity_id = $entity->id();
     if ($entity_id === NULL) {
@@ -100,13 +104,19 @@ class GroupContentStorage extends SqlContentEntityStorage implements GroupConten
 
       // Statically cache all group content IDs for the group content types.
       if (!empty($group_content_types)) {
-        // Use an optimized plain query to avoid the overhead of entity and SQL
-        // query builders.
-        $query = "SELECT id from {{$this->dataTable}} WHERE entity_id = :entity_id AND type IN (:types[])";
+        // Retrieve the entity reference field name.
+        $field_name = GroupContent::getEntityFieldNameForEntityType($entity->getEntityTypeId());
+        // Contruct the table name from the field name.
+        $table_name = 'group_content__' . $field_name;
+        // Add "_target_id" to the field name because that's the column where
+        // the id is stored.
+        $field_name = $field_name . '_target_id';
+
+        $query = "SELECT entity_id from {{$table_name}} WHERE {$field_name} = :{$field_name} AND bundle IN (:bundles[])";
         $this->loadByEntityCache[$entity_type_id][$entity_id] = $this->database
           ->query($query, [
-            ':entity_id' => $entity_id,
-            ':types[]' => array_keys($group_content_types),
+            $field_name => $entity_id,
+            ':bundles[]' => array_keys($group_content_types),
           ])
           ->fetchCol();
       }

@@ -2,12 +2,13 @@
 
 namespace Drupal\group\Entity;
 
-use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -35,7 +36,7 @@ interface GroupInterface extends ContentEntityInterface, EntityOwnerInterface, E
   /**
    * Adds a content entity as a group content entity.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The content entity to add to the group.
    * @param string $plugin_id
    *   The ID of the content enabler plugin to add the entity with.
@@ -43,7 +44,7 @@ interface GroupInterface extends ContentEntityInterface, EntityOwnerInterface, E
    *   (optional) Extra values to add to the group content relationship. You
    *   cannot overwrite the group ID (gid) or entity ID (entity_id).
    */
-  public function addContent(ContentEntityInterface $entity, $plugin_id, $values = []);
+  public function addContent(EntityInterface $entity, $plugin_id, $values = []);
 
   /**
    * Retrieves all GroupContent entities for the group.

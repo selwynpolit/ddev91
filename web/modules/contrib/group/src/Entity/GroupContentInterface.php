@@ -2,9 +2,10 @@
 
 namespace Drupal\group\Entity;
 
-use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\user\EntityOwnerInterface;
 
 /**
  * Provides an interface defining a Group content entity.
@@ -35,6 +36,27 @@ interface GroupContentInterface extends ContentEntityInterface, EntityOwnerInter
   public function getEntity();
 
   /**
+   * Returns the name of the entity reference field for a given entity type.
+   *
+   * @param string $entity_type_id
+   *   The ID of the entity type to retrieve the field name for.
+   *
+   * @return string
+   *   The name of the field referencing group content.
+   */
+  public static function getEntityFieldNameForEntityType($entity_type_id);
+
+  /**
+   * Returns the name of the group content entity reference field.
+   *
+   * @return string
+   *   The name of the field referencing group content.
+   *
+   * @see \Drupal\group\Entity\GroupContentInterface::getEntityFieldNameForEntityType()
+   */
+  public function getEntityFieldName();
+
+  /**
    * Returns the content enabler plugin that handles the group content.
    *
    * @return \Drupal\group\Plugin\GroupContentEnablerInterface
@@ -55,12 +77,12 @@ interface GroupContentInterface extends ContentEntityInterface, EntityOwnerInter
   /**
    * Loads group content entities which reference a given entity.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   An entity which may be within one or more groups.
    *
    * @return \Drupal\group\Entity\GroupContentInterface[]
    *   An array of group content entities which reference the given entity.
    */
-  public static function loadByEntity(ContentEntityInterface $entity);
+  public static function loadByEntity(EntityInterface $entity);
 
 }
