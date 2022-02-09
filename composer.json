@@ -22,7 +22,7 @@
         "drupal/core-project-message": "^9.1",
         "drupal/core-recommended": "^9.1",
         "drupal/group": "^1.4",
-        "drupal/groupmenu": "^1.0-beta",
+        "drupal/groupmedia": "^2.0-alpha",
         "drupal/menu_block": "^1.7",
         "drupal/module_filter": "^3.2",
         "drupal/pathauto": "^1.8",
