@@ -1,0 +1,11 @@
+name: 'Group Media (Patch from Group)'
+description: 'Legacy module used for upgrade path'
+package: 'Group'
+type: 'module'
+core_version_requirement: ^8.8 || ^9
+hidden: true
+
+# Information added by Drupal.org packaging script on 2021-07-22
+version: '8.x-2.0-alpha10'
+project: 'groupmedia'
+datestamp: 1626957053
