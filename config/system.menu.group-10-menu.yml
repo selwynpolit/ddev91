@@ -1,8 +1,0 @@
-uuid: e666f120-2883-4aae-9f3f-3c4710b09160
-langcode: en
-status: true
-dependencies: {  }
-id: group-10-menu
-label: 'Selwyn Lab menu'
-description: 'Menu for Selwyn Lab'
-locked: false

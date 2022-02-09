@@ -1,8 +1,0 @@
-uuid: f5444407-0ced-4709-8771-2f31735b21c0
-langcode: en
-status: true
-dependencies: {  }
-id: group-8-menu
-label: 'Danny Lab menu'
-description: 'Menu for Danny Lab'
-locked: false

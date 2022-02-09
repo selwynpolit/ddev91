@@ -1,8 +1,0 @@
-uuid: cfe3a59b-6812-4627-9756-7b8b60deaf2a
-langcode: en
-status: true
-dependencies: {  }
-id: danny-menu-2
-label: 'Danny Menu 2'
-description: 'Danny menu 2'
-locked: false

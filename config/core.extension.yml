@@ -29,8 +29,6 @@ module:
   filter: 0
   gnode: 0
   group: 0
-  groupmenu: 0
-  groupmenu_block: 0
   help: 0
   history: 0
   image: 0
