@@ -1,0 +1,17 @@
+uuid: 8d2fa794-c76d-42d8-b57d-d4a65ba68fde
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.faction
+  enforced:
+    config:
+      - user.role.lab_editor
+id: faction-6c9c30f45
+label: 'Lab Editor'
+weight: 4
+internal: true
+audience: outsider
+group_type: faction
+permissions_ui: false
+permissions: {  }

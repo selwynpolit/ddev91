@@ -1,8 +1,0 @@
-uuid: bb4c0434-0056-443e-95df-11518c98123e
-langcode: en
-status: true
-dependencies: {  }
-id: lab-menu
-label: 'Lab Menu'
-description: 'Labs Menu'
-locked: false

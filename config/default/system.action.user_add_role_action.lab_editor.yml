@@ -1,0 +1,14 @@
+uuid: 3c8ca649-5631-4202-8d2e-4306e41e11ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.lab_editor
+  module:
+    - user
+id: user_add_role_action.lab_editor
+label: 'Add the Lab Editor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: lab_editor

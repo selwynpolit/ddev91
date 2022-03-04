@@ -1,0 +1,17 @@
+uuid: 01a451b3-a023-4f19-b78a-26373409c91e
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.lab
+id: lab-anonymous
+label: Anonymous
+weight: -102
+internal: true
+audience: anonymous
+group_type: lab
+permissions_ui: true
+permissions:
+  - 'view group'
+  - 'view group_node:lab_home_page entity'
+  - 'view group_node:lab_page entity'

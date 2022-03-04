@@ -1,0 +1,21 @@
+uuid: d6bd0d21-0dc0-434a-8ce4-85854da1f583
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.lab
+    - group_content_menu.group_content_menu_type.lab_menu
+  module:
+    - group_content_menu
+id: lab-group_content_menu-lab_menu
+label: 'Lab: Group menu (Lab Menu)'
+description: 'Adds <em class="placeholder">Lab Menu</em> menu items to groups.'
+group_type: lab
+content_plugin: 'group_content_menu:lab_menu'
+plugin_config:
+  group_cardinality: 1
+  entity_cardinality: 1
+  use_creation_wizard: false
+  auto_create_group_menu: false
+  auto_create_home_link: false
+  auto_create_home_link_title: Home

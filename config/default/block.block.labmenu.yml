@@ -1,0 +1,50 @@
+uuid: 74fc370e-8425-4cfc-b45c-47c6fa8c1e0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - group_content_menu.group_content_menu_type.lab_menu
+  module:
+    - group
+    - group_content_menu
+    - node
+  theme:
+    - bartik
+id: labmenu
+theme: bartik
+region: sidebar_first
+weight: -7
+provider: null
+plugin: 'group_content_menu:lab_menu'
+settings:
+  id: 'group_content_menu:lab_menu'
+  label: 'Lab Menu'
+  label_display: visible
+  provider: group_content_menu
+  context_mapping: {  }
+  level: 1
+  depth: 0
+  expand_all_items: true
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      lab_home_page: lab_home_page
+      lab_page: lab_page
+  'entity_bundle:group':
+    id: 'entity_bundle:group'
+    negate: false
+    context_mapping:
+      group: '@group.group_route_context:group'
+    bundles:
+      lab: lab
+  group_type:
+    id: group_type
+    group_types:
+      lab: lab
+    negate: false
+    context_mapping:
+      group: '@group.group_route_context:group'

@@ -1,0 +1,14 @@
+uuid: c9640d83-f35d-4c2a-b1c1-f85aaeb1c092
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.lab_editor
+  module:
+    - user
+id: user_remove_role_action.lab_editor
+label: 'Remove the Lab Editor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: lab_editor
