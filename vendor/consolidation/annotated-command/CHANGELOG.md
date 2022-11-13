@@ -1,5 +1,41 @@
 # Change Log
 
+### 4.6.1 - 9 November 2022
+
+- Use Attributes to set suggestedValues for arg/option completion (#275)
+- Default value and therefore data type of parameter-defined cli options was being dropped (#280)
+- Make nullable properties in Attributes actually nullable (#278)
+- Only ignore commands in parent classes if flag is set (reverts backwards-compatibility break) (#277)
+
+### 4.6.0 - 30 October 2022
+
+- Add support for command completion (#274)
+
+### 4.5.7 - 20 October 2022
+
+- Stop loading commands from inherited classes (#273)
+
+### 4.5.6 - 22 June 2022
+
+- PHP 8.2 compatibility: dynamic properties are deprecated (#271)
+
+### 4.5.5 - 26 April 2022
+
+- No functional change; new release to fix false positives in b/c check caused by lockfile problem.
+
+### 4.5.4 - 5 April 2022
+
+- Allow psr/log ^3
+
+### 4.5.3 - 1 April 2022
+
+- Check the type of the reflection object before attempting to call isBuiltin(). (#265)
+
+### 4.5.2 - 20 February 2022
+
+- Do not pass null to Symfony Command methods (#262)
+- CommandResult inheritance (#260)
+
 ### 4.5.1 - 29 December 2021
 
 - PHP 8.1

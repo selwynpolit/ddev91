@@ -6,6 +6,7 @@ CONTENTS OF THIS FILE
 * Installation
 * Configuration
 * Automatic association to a group
+* Adding media to group in bulk
 * Maintainers
 
 INTRODUCTION
@@ -95,6 +96,19 @@ For further details check `groupmedia.api.php` php comments.
 
 **IMPORTANT!** Disabled/enabled feature of automatic associating doesn't
 influence the manual group media relation CRUD.
+
+Adding media to group in bulk
+--------------------------------
+
+Media items can be added to group in bulk operations. For this one needs to add
+action "Assign Media to Group" and/or "Remove media from Group" to view that is
+based on media entity type. By default the actions are not configured and they
+require group id to be set. You can do it with help of "Action" module (shipped
+by Drupal core). Each action can have only 1 group set. This solution is good
+if the number of groups is small. If the number of groups is rather big it is
+recommended to use submodule "Group Media Views Bulk Operations (VBO)" that
+uses "Views bulk operations" module as a dependency. This allows to select the
+group just before the action is applied.
 
 ### Documentation on-line
 

@@ -493,6 +493,9 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
     else {
       $this->develGenerateContentAddNode($context['results']);
     }
+    if (!isset($context['results']['num'])) {
+      $context['results']['num'] = 0;
+    }
     $context['results']['num']++;
     if (!empty($vars['num_translations'])) {
       $context['results']['num_translations'] += $vars['num_translations'];
@@ -636,6 +639,7 @@ class ContentDevelGenerate extends DevelGenerateBase implements ContainerFactory
       'title' => $title_prefix . $this->getRandom()->sentences(mt_rand(1, $results['title_length']), TRUE),
       'uid' => $uid,
       'revision' => mt_rand(0, 1),
+      'moderation_state' => 'published',
       'status' => TRUE,
       'promote' => mt_rand(0, 1),
       'created' => $this->time->getRequestTime() - mt_rand(0, $results['time_range']),

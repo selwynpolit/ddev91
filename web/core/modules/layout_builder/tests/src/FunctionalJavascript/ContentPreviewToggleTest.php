@@ -4,6 +4,7 @@ namespace Drupal\Tests\layout_builder\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\Tests\contextual\FunctionalJavascript\ContextualLinkClickTrait;
+use Drupal\Tests\system\Traits\OffCanvasTestTrait;
 
 /**
  * Tests toggling of content preview.
@@ -14,7 +15,7 @@ class ContentPreviewToggleTest extends WebDriverTestBase {
 
   use ContextualLinkClickTrait;
   use LayoutBuilderSortTrait;
-
+  use OffCanvasTestTrait;
   /**
    * {@inheritdoc}
    */
@@ -23,6 +24,7 @@ class ContentPreviewToggleTest extends WebDriverTestBase {
     'block',
     'node',
     'contextual',
+    'off_canvas_test',
   ];
 
   /**
@@ -131,7 +133,7 @@ class ContentPreviewToggleTest extends WebDriverTestBase {
     $assert_session = $this->assertSession();
 
     $this->clickContextualLink('.block-field-blocknodebundle-for-this-particular-testbody', 'Configure');
-    $this->assertNotEmpty($assert_session->waitForElement('css', "#drupal-off-canvas"));
+    $this->waitForOffCanvasArea();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertNotEmpty($this->assertSession()->waitForButton('Close'));
     $page->pressButton('Close');

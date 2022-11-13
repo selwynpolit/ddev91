@@ -4,4 +4,7 @@ services:
     parent: default_plugin_manager
   groupmedia.attach_group:
     class: Drupal\groupmedia\AttachMediaToGroup
-    arguments: ['@plugin.manager.groupmedia.finder', '@plugin.manager.group_content_enabler', '@module_handler', '@entity_type.manager', '@config.factory']
+    arguments: ['@plugin.manager.groupmedia.finder', '@plugin.manager.group_content_enabler', '@module_handler', '@entity_type.manager', '@config.factory', '@logger.channel.groupmedia']
+  logger.channel.groupmedia:
+    parent: logger.channel_base
+    arguments: ['groupmedia']

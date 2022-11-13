@@ -5,9 +5,9 @@ type: 'module'
 core_version_requirement: ^8.8 || ^9
 dependencies:
   - drupal:media
-  - group:group (>=8.x-1.2)
+  - group:group
 
-# Information added by Drupal.org packaging script on 2021-07-22
-version: '8.x-2.0-alpha10'
+# Information added by Drupal.org packaging script on 2022-09-14
+version: '8.x-2.0-alpha11'
 project: 'groupmedia'
-datestamp: 1626957053
+datestamp: 1663140726

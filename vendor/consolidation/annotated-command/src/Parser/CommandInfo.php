@@ -565,6 +565,7 @@ class CommandInfo
         $opts = $this->options()->getValues();
         foreach ($opts as $name => $defaultValue) {
             $description = $this->options()->getDescription($name);
+            $suggestedValues = $this->options()->getSuggestedValues($name);
 
             $fullName = $name;
             $shortcut = '';
@@ -584,7 +585,7 @@ class CommandInfo
             if ($defaultValue === false) {
                 $explicitOptions[$fullName] = new InputOption($fullName, $shortcut, InputOption::VALUE_NONE, $description);
             } elseif ($defaultValue === InputOption::VALUE_REQUIRED) {
-                $explicitOptions[$fullName] = new InputOption($fullName, $shortcut, InputOption::VALUE_REQUIRED, $description);
+                $explicitOptions[$fullName] = new InputOption($fullName, $shortcut, InputOption::VALUE_REQUIRED, $description, null, $suggestedValues);
             } elseif (is_array($defaultValue)) {
                 $optionality = count($defaultValue) ? InputOption::VALUE_OPTIONAL : InputOption::VALUE_REQUIRED;
                 $explicitOptions[$fullName] = new InputOption(
@@ -592,10 +593,11 @@ class CommandInfo
                     $shortcut,
                     InputOption::VALUE_IS_ARRAY | $optionality,
                     $description,
-                    count($defaultValue) ? $defaultValue : null
+                    count($defaultValue) ? $defaultValue : null,
+                    $suggestedValues
                 );
             } else {
-                $explicitOptions[$fullName] = new InputOption($fullName, $shortcut, InputOption::VALUE_OPTIONAL, $description, $defaultValue);
+                $explicitOptions[$fullName] = new InputOption($fullName, $shortcut, InputOption::VALUE_OPTIONAL, $description, $defaultValue, $suggestedValues);
             }
         }
 
@@ -624,25 +626,30 @@ class CommandInfo
         return $this->findOptionAmongAlternatives($optionName);
     }
 
-    public function addArgumentDescription($name, $description)
+    public function addArgumentDescription($name, $description, $suggestions = [])
     {
-        $this->addOptionOrArgumentDescription($this->arguments(), $name, $description);
+        $this->addOptionOrArgumentDescription($this->arguments(), $name, $description, $suggestions);
     }
 
     public function addOptionDescription($name, $description)
     {
         $variableName = $this->findMatchingOption($name);
+        $defaultFromParameter = null;
         if ($this->simpleOptionParametersAllowed && $this->arguments()->exists($variableName)) {
-            $existingArg = $this->arguments()->removeMatching($variableName);
+            $defaultFromParameter = $this->arguments()->removeMatching($variableName);
             // One of our parameters is an option, not an argument. Flag it so that we can inject the right value when needed.
             $this->parameterMap[$variableName] = true;
         }
-        $this->addOptionOrArgumentDescription($this->options(), $variableName, $description);
+        $this->addOptionOrArgumentDescription($this->options(), $variableName, $description, [], $defaultFromParameter);
     }
 
-    protected function addOptionOrArgumentDescription(DefaultsWithDescriptions $set, $variableName, $description)
+    // Note: 'suggestions' passed in, but not used
+    protected function addOptionOrArgumentDescription(DefaultsWithDescriptions $set, $variableName, $description, $suggestions = [], $defaultFromParameter = null)
     {
         list($description, $defaultValue) = $this->splitOutDefault($description);
+        if (empty($defaultValue) && !empty($defaultFromParameter)) {
+            $defaultValue = $defaultFromParameter;
+        }
         $set->add($variableName, $description);
         if ($defaultValue !== null) {
             $set->setDefaultValue($variableName, $defaultValue);
@@ -708,7 +715,7 @@ class CommandInfo
         if ($this->lastParameterIsOptionsArray()) {
             array_pop($params);
         }
-        while (!empty($params) && ($params[0]->getType() != null) && !($params[0]->getType()->isBuiltin())) {
+        while (!empty($params) && ($params[0]->getType() != null) && ($params[0]->getType() instanceof \ReflectionNamedType) && !($params[0]->getType()->isBuiltin())) {
             $param = array_shift($params);
             $injectedClass = $param->getType()->getName();
             array_unshift($this->injectedClasses, $injectedClass);
@@ -729,7 +736,7 @@ class CommandInfo
     {
         // Commandline arguments must be strings, so ignore any
         // parameter that is typehinted to any non-primitive class.
-        if ($param->getType() && !$param->getType()->isBuiltin()) {
+        if ($param->getType() && (!$param->getType() instanceof \ReflectionNamedType || !$param->getType()->isBuiltin())) {
             return;
         }
         $result->add($param->name);
