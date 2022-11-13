@@ -1,4 +1,4 @@
-uuid: 4c7e27cf-aa05-4652-a7e9-e800a73e2943
+uuid: 67d04140-6b93-4f65-a25d-12fdd0db144d
 langcode: en
 status: true
 dependencies:
@@ -42,9 +42,7 @@ settings:
           name: Tools
           items:
             - Source
-  plugins:
-    stylescombo:
-      styles: ''
+  plugins: {  }
 image_upload:
   status: true
   scheme: public

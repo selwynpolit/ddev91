@@ -1,8 +1,0 @@
-uuid: 9f2c5c28-b64a-4190-b5a7-322737c4e48e
-langcode: en
-status: true
-dependencies: {  }
-name: 'West Lab Terms'
-vid: west_lab_terms
-description: 'West Lab Terms'
-weight: 0

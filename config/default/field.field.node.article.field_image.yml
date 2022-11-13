@@ -1,20 +1,22 @@
-uuid: 6abb6163-014e-4889-bc3f-b23ebce75733
+uuid: 6e0b2fa9-709b-413c-b77e-59e7854a92c6
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.group.field_faction_insignia
-    - group.type.faction
+    - field.storage.node.field_image
+    - node.type.article
   module:
     - image
-id: group.faction.field_faction_insignia
-field_name: field_faction_insignia
-entity_type: group
-bundle: faction
-label: 'Faction Insignia'
+_core:
+  default_config_hash: PmVL51L3A9QGbPLoeLHw5epAPszeZRasCeC3imeeDRQ
+id: node.article.field_image
+field_name: field_image
+entity_type: node
+bundle: article
+label: Image
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -30,7 +32,7 @@ settings:
   title_field: false
   title_field_required: false
   default_image:
-    uuid: ''
+    uuid: null
     alt: ''
     title: ''
     width: null

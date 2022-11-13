@@ -1,18 +1,13 @@
-uuid: 8a4e9181-19be-4059-a777-aa05bf70bba9
+uuid: 112b951d-ff09-4be1-842e-93e51828de42
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.basic_html
-    - media.type.image
-    - node.type.article
   module:
     - comment
     - contact
-    - devel
     - filter
-    - media
-    - node
     - search
     - shortcut
     - system
@@ -27,16 +22,7 @@ permissions:
   - 'access content'
   - 'access shortcuts'
   - 'access site-wide contact form'
-  - 'create article content'
-  - 'create image media'
-  - 'create media'
-  - 'delete media'
-  - 'delete own image media'
-  - 'edit own image media'
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
-  - 'switch users'
-  - 'update media'
   - 'use text format basic_html'
-  - 'view media'

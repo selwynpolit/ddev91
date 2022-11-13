@@ -1,4 +1,4 @@
-uuid: 24c96423-32a2-45ec-8796-37d70bf2706a
+uuid: 819a0641-253b-4987-9d44-017b01305b8f
 langcode: en
 status: true
 dependencies:
@@ -24,6 +24,8 @@ content:
     settings:
       image_link: content
       image_style: thumbnail
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content

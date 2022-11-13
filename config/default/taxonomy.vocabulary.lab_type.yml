@@ -1,8 +1,0 @@
-uuid: b58a80c3-9e41-4216-b35a-b79eb7840e98
-langcode: en
-status: true
-dependencies: {  }
-name: 'Lab Type'
-vid: lab_type
-description: 'Laboratory Type'
-weight: 0
