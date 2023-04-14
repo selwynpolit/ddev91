@@ -24,7 +24,7 @@ class GroupMediaConfigTest extends EntityKernelTestBase {
     'variationcache',
     'media',
     'groupmedia',
-    'views'
+    'views',
   ];
 
   /**

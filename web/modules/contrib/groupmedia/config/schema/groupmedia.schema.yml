@@ -1,16 +1,6 @@
-groupmedia.settings:
-  type: config_object
-  label: 'GroupMedia settings'
-  mapping:
-    tracking_enabled:
-      type: boolean
-      label: 'Enable tracking'
-    bundles:
-      type: sequence
-      label: 'Media bundles to exclude'
-      sequence:
-        type: string
-        label: 'Media bundle name'
+group_content_enabler.config.tracking_enabled:
+  type: 'integer'
+  label: 'Tracking enabled'
 
 action.configuration.assign_media_to_group:
   type: mapping

@@ -65,6 +65,7 @@ class GroupMedia extends GroupContentEnablerBase {
   public function defaultConfiguration() {
     $config = parent::defaultConfiguration();
     $config['entity_cardinality'] = 1;
+    $config['tracking_enabled'] = 0;
     return $config;
   }
 
@@ -73,6 +74,13 @@ class GroupMedia extends GroupContentEnablerBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
+
+    $form['tracking_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable media tracking'),
+      '#description' => $this->t('If enabled the system would try to attach media items referenced in group content to corresponding group'),
+      '#default_value' => $this->configuration['tracking_enabled'],
+    ];
 
     // Disable the entity cardinality field as the functionality of this module
     // relies on a cardinality of 1. We don't just hide it, though, to keep a UI
@@ -91,6 +99,13 @@ class GroupMedia extends GroupContentEnablerBase {
     $dependencies = parent::calculateDependencies();
     $dependencies['config'][] = 'media.type.' . $this->getEntityBundle();
     return $dependencies;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isTrackingEnabled() {
+    return $this->configuration['tracking_enabled'] == 1;
   }
 
 }

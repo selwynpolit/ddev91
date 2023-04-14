@@ -7,7 +7,7 @@ use Drupal\media\Entity\MediaType;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 
 /**
- * Class GroupMediaDeriver.
+ * Class Group Media Deriver.
  *
  * @package Drupal\groupmedia\Plugin\GroupContentEnabler
  */

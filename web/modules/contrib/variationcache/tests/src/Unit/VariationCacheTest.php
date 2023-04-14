@@ -138,15 +138,19 @@ class VariationCacheTest extends UnitTestCase {
             case 'house.type':
               $keys[] = "ht.$housing_type";
               break;
+
             case 'garden.type':
               $keys[] = "gt.$garden_type";
               break;
+
             case 'house.orientation':
               $keys[] = "ho.$house_orientation";
               break;
+
             case 'solar.type':
               $keys[] = "st.$solar_type";
               break;
+
             default:
               $keys[] = $context_id;
           }

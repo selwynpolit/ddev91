@@ -1,0 +1,7 @@
+tea_vote_cache.example:
+  path: '/tea-vote-cache/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\tea_vote_cache\Controller\TeaVoteCacheController::build'
+  requirements:
+    _permission: 'access content'

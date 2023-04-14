@@ -12,7 +12,7 @@ use Drupal\media\MediaInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class MediaFinderBase.
+ * Class Media Finder Base.
  *
  * @package Drupal\groupmedia\Plugin\MediaFinder
  */

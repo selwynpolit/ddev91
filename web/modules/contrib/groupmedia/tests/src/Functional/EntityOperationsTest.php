@@ -25,17 +25,10 @@ class EntityOperationsTest extends GroupEntityOperationsTest {
   /**
    * Checks for entity operations under given circumstances.
    *
-   * Overriding the parent to provide an extra parameter to the data provider.
-   *
-   * @parem array $visible
+   * @param array $visible
    *   A list of visible link labels, keyed by path.
-   * @parem array $invisible
+   * @param array $invisible
    *   A list of invisible link labels, keyed by path.
-   *
-   * @param $visible
-   *   The expected visible links.
-   * @param $invisible
-   *   The expected invisible links.
    * @param string[] $permissions
    *   A list of group permissions to assign to the user.
    * @param string[] $modules
@@ -51,7 +44,7 @@ class EntityOperationsTest extends GroupEntityOperationsTest {
       return;
     }
 
-    // Create an media type and enable it as group content.
+    // Create a media type and enable it as group content.
     $media_type = $this->createMediaType('image');
     $media_type->save();
     \Drupal::entityTypeManager()

@@ -8,6 +8,11 @@
       "name": "Artem Dmitriiev",
       "homepage": "https://www.drupal.org/u/admitriiev",
       "role": "Maintainer"
+    },
+    {
+      "name": "Nikolay Lobachev",
+      "homepage": "https://www.drupal.org/u/lobsterr",
+      "role": "Maintainer"
     }
   ],
   "support": {
@@ -17,6 +22,6 @@
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
   "require": {
-    "drupal/group": "^1.2 || 1.x-dev@dev"
+    "drupal/group": "^1.5"
   }
 }

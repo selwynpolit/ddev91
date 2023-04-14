@@ -17,3 +17,33 @@ function groupmedia_uninstall() {
     }
   }
 }
+
+/**
+ * Remove settings and set new plugin settings.
+ */
+function groupmedia_update_8001() {
+  $config = \Drupal::config('groupmedia.settings');
+  if ($config->get('tracking_enabled')) {
+    // Check for which bundles tracking is enabled and move
+    // this configuration to plugin settings.
+    $bundles = \Drupal::config('groupmedia.settings')->get('bundles');
+    if ($bundles) {
+      $entity_type_manager = \Drupal::entityTypeManager();
+      foreach ($bundles as $bundle) {
+        $group_content_types = $entity_type_manager->getStorage('group_content_type')->loadByProperties([
+          'content_plugin' => "group_media:{$bundle}",
+        ]);
+        /** @var \Drupal\group\Entity\GroupContentType $group_content_type */
+        foreach ($group_content_types as $group_content_type) {
+          $configuration = $group_content_type->get('plugin_config');
+          $configuration['tracking_enabled'] = 1;
+          $group_content_type->set('plugin_config', $configuration);
+          $group_content_type->save(TRUE);
+        }
+      }
+    }
+  }
+
+  // Remove settings.
+  \Drupal::configFactory()->getEditable('groupmedia.settings')->delete();
+}

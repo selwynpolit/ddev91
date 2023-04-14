@@ -6,13 +6,14 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\group\Entity\GroupContentInterface;
-use Drupal\media\MediaInterface;
+use Drupal\group\Entity\GroupContentType;
 use Drupal\media\MediaTypeInterface;
 
 /**
@@ -23,14 +24,10 @@ function groupmedia_media_type_insert(MediaTypeInterface $media_type) {
 }
 
 /**
- * Implements hook_entity_insert().
+ * Implements hook_ENTITY_TYPE_insert().
  */
-function groupmedia_entity_insert(EntityInterface $entity) {
-  // React only on Group Content insert, because adding other types do not add
-  // group content. Group content will be available through getEntity() method.
-  if ($entity instanceof GroupContentInterface) {
-    \Drupal::service('groupmedia.attach_group')->attach($entity);
-  }
+function groupmedia_group_content_insert(EntityInterface $group_content) {
+  \Drupal::service('groupmedia.attach_group')->attach($group_content);
 }
 
 /**
@@ -126,8 +123,7 @@ function groupmedia_entity_operation(EntityInterface $entity) {
     if ($has_media) {
       /** @var \Symfony\Component\Routing\RouterInterface $router */
       $router = \Drupal::service('router.no_access_checks');
-      if ($router->getRouteCollection()
-        ->get('view.group_media.page_1') !== NULL) {
+      if ($router->getRouteCollection()->get('view.group_media.page_1') !== NULL) {
         $operations['media'] = [
           'title' => t('Media'),
           'weight' => 22,
@@ -143,11 +139,27 @@ function groupmedia_entity_operation(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_groupmedia_finder_add_alter().
+ * Implements hook_ENTITY_TYPE_create_access().
  */
-function groupmedia_groupmedia_finder_add_alter(&$result, MediaInterface $media, array &$context) {
-  $bundles = \Drupal::config('groupmedia.settings')->get('bundles');
-  if (in_array($media->bundle(), $bundles, TRUE)) {
-    $result[] = FALSE;
+function groupmedia_group_content_create_access(AccountInterface $account, array $context, $entity_bundle) {
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.group_content.group_media_add_page') {
+    // Get the group content type from the entity_bundle.
+    /** @var \Drupal\group\Entity\GroupContentTypeInterface $group_content_type */
+    $group_content_type = GroupContentType::load($entity_bundle);
+
+    // Check if we are dealing with a group_media content plugin.
+    $plugin_definition = $group_content_type->getContentPlugin()->getPluginDefinition();
+    if ($plugin_definition['id'] == 'group_media' && $plugin_definition['entity_type_id'] == 'media') {
+      $media_bundle = $plugin_definition['entity_bundle'];
+      $plugin_id = "group_media:$media_bundle";
+      $permission = "create $plugin_id entity";
+
+      // Check if user has permission to create this media bundle.
+      /** @var \Drupal\group\Entity\GroupInterface $group */
+      $group = $context['group'];
+      return $group->hasPermission($permission, $account) ? AccessResult::allowed() : AccessResult::neutral();
+    }
   }
+  return AccessResult::neutral();
 }

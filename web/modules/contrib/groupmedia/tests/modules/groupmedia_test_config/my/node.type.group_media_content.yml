@@ -1,0 +1,8 @@
+langcode: en
+status: true
+name: 'Group media content'
+type: group_media_content
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

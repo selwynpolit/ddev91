@@ -1,0 +1,5 @@
+services:
+  tea_vote_cache.commands:
+    class: \Drupal\tea_vote_cache\Commands\TeaVoteCacheCommands
+    tags:
+      - { name: drush.command }

@@ -24,11 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RemoveMediaFromGroup extends ViewsBulkOperationsActionBase implements PluginFormInterface, ContainerFactoryPluginInterface {
 
   /**
+   * Entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
+   * Attach to media service.
+   *
    * @var \Drupal\groupmedia\AttachMediaToGroup
    */
   protected $attachMediaToGroup;
@@ -37,10 +41,15 @@ class RemoveMediaFromGroup extends ViewsBulkOperationsActionBase implements Plug
    * AssignMediaToGroup constructor.
    *
    * @param array $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
+   *   Configuration.
+   * @param string $plugin_id
+   *   Plugin id.
+   * @param mixed $plugin_definition
+   *   Plugin definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    * @param \Drupal\groupmedia\AttachMediaToGroup $attachMediaToGroup
+   *   Attach to media service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, AttachMediaToGroup $attachMediaToGroup) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -60,6 +69,7 @@ class RemoveMediaFromGroup extends ViewsBulkOperationsActionBase implements Plug
       $container->get('groupmedia.attach_group')
     );
   }
+
   /**
    * {@inheritdoc}
    */
@@ -111,6 +121,13 @@ class RemoveMediaFromGroup extends ViewsBulkOperationsActionBase implements Plug
     $result = $object->access('update', $account, TRUE);
 
     return $return_as_object ? $result : $result->isAllowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    // Method required by base class.
   }
 
 }

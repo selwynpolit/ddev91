@@ -1,0 +1,6 @@
+name: TEA Vote Cache
+type: module
+description: Play with TEA vote caching drush commands
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9
