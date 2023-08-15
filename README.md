@@ -3,6 +3,11 @@
 
 ## Changelog
 
+### 8-14-23:
+* Create test module to try out writing text formats
+* install allowed formats module 2.0
+* update everything
+*
 
 ### 4-14-23
 * Update to latest Drupal version and PHP 8.1 etc.
