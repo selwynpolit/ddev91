@@ -72,7 +72,6 @@ class GroupMediaTestTracking extends GroupKernelTestBase {
     ]);
 
     $this->group = $this->createGroup();
-    $this->config = $this->container->get('plugin.manager.group_content_enabler');
 
     // Enable groupmedia remote video plugin and node plugin.
     $group_content_type_storage = $this->entityTypeManager->getStorage('group_content_type');

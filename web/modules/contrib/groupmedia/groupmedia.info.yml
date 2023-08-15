@@ -7,7 +7,7 @@ dependencies:
   - drupal:media
   - group:group
 
-# Information added by Drupal.org packaging script on 2023-03-02
-version: '8.x-2.0-rc2'
+# Information added by Drupal.org packaging script on 2023-05-17
+version: '8.x-2.0-rc3'
 project: 'groupmedia'
-datestamp: 1677768030
+datestamp: 1684332824

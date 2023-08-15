@@ -1,0 +1,9 @@
+test.example:
+  path: '/test/example'
+  defaults:
+    _title: 'Test Module Example'
+    _controller: '\Drupal\test\Controller\TestController::build'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
