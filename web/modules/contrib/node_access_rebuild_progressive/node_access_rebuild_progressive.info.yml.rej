@@ -1,0 +1,8 @@
+--- node_access_rebuild_progressive.info.yml
++++ node_access_rebuild_progressive.info.yml
+@@ -1,4 +1,4 @@
+ name: 'Node Access Rebuild Progressive'
+ description: 'Rebuild node access grants in chunks'
+ type: module
+-core_version_requirement: ^8 || ^9
++core_version_requirement: ^9.4 || ^10

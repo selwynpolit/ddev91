@@ -22,10 +22,9 @@
         "drupal/core-composer-scaffold": "^9.1",
         "drupal/core-project-message": "^9.1",
         "drupal/core-recommended": "^9.1",
-        "drupal/group": "^1.4",
-        "drupal/groupmedia": "^2.0-alpha",
         "drupal/menu_block": "^1.7",
         "drupal/module_filter": "^3.2",
+        "drupal/node_access_rebuild_progressive": "^2.0",
         "drupal/pathauto": "^1.8",
         "drupal/search_api": "^1.23",
         "drupal/search_api_page": "^1.0@beta",
@@ -47,12 +46,6 @@
     },
     "extra": {
         "patches": {
-            "drupal/group": {
-                "Entities identified by strings as group content": "https://www.drupal.org/files/issues/2021-08-24/2797793-279.patch"
-            },
-            "drupal/groupmenu": {
-                "Group Menu Block doesn't show in Drupal 9 - The node context is not a valid context": "https://www.drupal.org/files/issues/2021-03-29/3206302-3.diff"
-            }
         },
         "drupal-scaffold": {
             "locations": {

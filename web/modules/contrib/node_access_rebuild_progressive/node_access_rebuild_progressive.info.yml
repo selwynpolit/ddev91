@@ -1,0 +1,9 @@
+name: 'Node Access Rebuild Progressive'
+description: 'Rebuild node access grants in chunks'
+type: module
+core_version_requirement: ^9.4 || ^10
+
+# Information added by Drupal.org packaging script on 2020-06-23
+version: '2.0.0'
+project: 'node_access_rebuild_progressive'
+datestamp: 1592925930
