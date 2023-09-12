@@ -36,7 +36,7 @@ function node_access_rebuild_progressive_trigger() {
   node_access_needs_rebuild(FALSE);
   // Add default grants in the unlikely case
   // no modules implement node_grants anymore.
-  if (!\Drupal::moduleHandler()->hasImplementations('node_grants')) {
+  if (!count(\Drupal::moduleHandler()->getImplementations('node_grants'))) {
     node_access_rebuild_progressive_set_default();
     return node_access_rebuild_progressive_finished();
   }

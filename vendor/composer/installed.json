@@ -2751,8 +2751,7 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "installation-source": "dist",
             "notification-url": "https://packages.drupal.org/8/downloads",
