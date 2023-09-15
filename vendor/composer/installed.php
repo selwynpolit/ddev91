@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '919c4540c3356b408b425b6f80f23bb8a0274fcf',
+        'reference' => '8986a16e584415bf22854f3874b9cb91b284a324',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -161,7 +161,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/cache',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/collections' => array(
             'pretty_version' => '1.8.0',
@@ -170,7 +170,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/collections',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/common' => array(
             'pretty_version' => '2.13.3',
@@ -179,7 +179,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/common',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/deprecations' => array(
             'pretty_version' => 'v1.1.1',
@@ -188,7 +188,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/deprecations',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/event-manager' => array(
             'pretty_version' => '1.2.0',
@@ -197,7 +197,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/event-manager',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/inflector' => array(
             'pretty_version' => '1.4.4',
@@ -206,7 +206,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/inflector',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/lexer' => array(
             'pretty_version' => '1.2.3',
@@ -224,7 +224,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/persistence',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'doctrine/reflection' => array(
             'pretty_version' => '1.2.4',
@@ -455,7 +455,7 @@
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/devel',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'drupal/menu_block' => array(
             'pretty_version' => '1.10.0',
@@ -496,7 +496,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '919c4540c3356b408b425b6f80f23bb8a0274fcf',
+            'reference' => '8986a16e584415bf22854f3874b9cb91b284a324',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -526,6 +526,15 @@
             'reference' => '8.x-1.12',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../web/modules/contrib/token',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'drupal/webprofiler' => array(
+            'pretty_version' => '9.0.2',
+            'version' => '9.0.2.0',
+            'reference' => '9.0.2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/webprofiler',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

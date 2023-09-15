@@ -28,6 +28,7 @@
         "drupal/pathauto": "^1.8",
         "drupal/search_api": "^1.23",
         "drupal/search_api_page": "^1.0@beta",
+        "drupal/webprofiler": "^9.0",
         "drush/drush": "^10.4"
     },
     "conflict": {
